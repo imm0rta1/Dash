@@ -1,0 +1,5 @@
+{
+  "name": "Hermes Etsy Operator Dashboard",
+  "description": "A local-first operator console for managing Hermes Agent workflows, Etsy shop operations, and automated tasks.",
+  "requestFramePermissions": []
+}
