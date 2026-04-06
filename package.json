@@ -1,7 +1,10 @@
 {
-  "name": "react-example",
+  "name": "hermes-ai-dashboard",
+  "description": "A premium glassmorphism dashboard for managing AI agents and workflows.",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "author": "",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",
