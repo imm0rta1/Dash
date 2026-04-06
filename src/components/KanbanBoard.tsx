@@ -36,10 +36,38 @@ export default function KanbanBoard() {
   const { setTicketDrawerOpen, setSelectedTicketId, isTicketDrawerOpen } = useUIStore();
 
   useEffect(() => {
+    // Initial fetch
     fetch('/api/tickets')
       .then(res => res.json())
       .then(data => setTickets(data));
-  }, [isTicketDrawerOpen]); // Refresh when drawer closes
+
+    // SSE connection for real-time updates
+    const eventSource = new EventSource('/api/stream/events');
+
+    eventSource.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        
+        if (data.type === 'TICKET_CREATED') {
+          setTickets(prev => {
+            // Prevent duplicates
+            if (prev.some(t => t.id === data.ticket.id)) return prev;
+            return [data.ticket, ...prev];
+          });
+        } else if (data.type === 'TICKET_UPDATED') {
+          setTickets(prev => prev.map(t => t.id === data.ticket.id ? data.ticket : t));
+        } else if (data.type === 'TICKET_DELETED') {
+          setTickets(prev => prev.filter(t => t.id !== data.ticketId));
+        }
+      } catch (err) {
+        console.error("Failed to parse SSE message:", err);
+      }
+    };
+
+    return () => {
+      eventSource.close();
+    };
+  }, []); // Run once on mount
 
   const sensors = useSensors(
     useSensor(PointerSensor, {

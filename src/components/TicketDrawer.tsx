@@ -32,8 +32,31 @@ export default function TicketDrawer() {
     if (selectedTicketId && isTicketDrawerOpen) {
       fetchTicket();
       fetchProfiles();
+
+      // SSE connection for real-time updates
+      const eventSource = new EventSource('/api/stream/events');
+
+      eventSource.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          
+          if (data.type === 'TICKET_UPDATED' && data.ticket.id === selectedTicketId) {
+            setTicket(data.ticket);
+            // Only update formData if not currently editing to prevent overwriting user input
+            setFormData((prev: any) => editing ? prev : data.ticket);
+          } else if (data.type === 'TICKET_DELETED' && data.ticketId === selectedTicketId) {
+            handleClose();
+          }
+        } catch (err) {
+          console.error("Failed to parse SSE message:", err);
+        }
+      };
+
+      return () => {
+        eventSource.close();
+      };
     }
-  }, [selectedTicketId, isTicketDrawerOpen]);
+  }, [selectedTicketId, isTicketDrawerOpen, editing]);
 
   const fetchTicket = async () => {
     setLoading(true);

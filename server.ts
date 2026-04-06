@@ -40,6 +40,20 @@ async function startServer() {
     res.json({ status: "ok", timestamp: new Date().toISOString() });
   });
 
+  // SSE Client Management
+  const sseClients = new Set<express.Response>();
+
+  const broadcastEvent = (event: any) => {
+    const data = `data: ${JSON.stringify(event)}\n\n`;
+    sseClients.forEach(client => {
+      try {
+        client.write(data);
+      } catch (err) {
+        sseClients.delete(client);
+      }
+    });
+  };
+
   // Tickets API
   app.get("/api/tickets", async (req, res) => {
     try {
@@ -74,6 +88,9 @@ async function startServer() {
         updatedAt: new Date(),
       };
       await db.insert(schema.tickets).values(newTicket).run();
+      
+      broadcastEvent({ type: "TICKET_CREATED", ticket: newTicket });
+      
       res.json(newTicket);
     } catch (err: any) {
       res.status(500).json({ error: err.message });
@@ -116,6 +133,9 @@ async function startServer() {
 
       await db.update(schema.tickets).set(updates).where(eq(schema.tickets.id, id)).run();
       const updated = await db.query.tickets.findFirst({ where: eq(schema.tickets.id, id) });
+      
+      broadcastEvent({ type: "TICKET_UPDATED", ticket: updated });
+      
       res.json(updated);
     } catch (err: any) {
       res.status(500).json({ error: err.message });
@@ -126,6 +146,9 @@ async function startServer() {
     try {
       const { id } = req.params;
       await db.delete(schema.tickets).where(eq(schema.tickets.id, id)).run();
+      
+      broadcastEvent({ type: "TICKET_DELETED", ticketId: id });
+      
       res.json({ success: true });
     } catch (err: any) {
       res.status(500).json({ error: err.message });
@@ -259,12 +282,15 @@ async function startServer() {
     res.setHeader("Connection", "keep-alive");
     res.flushHeaders();
 
+    sseClients.add(res);
+
     const interval = setInterval(() => {
       res.write(`data: ${JSON.stringify({ type: "heartbeat", timestamp: new Date() })}\n\n`);
     }, 15000);
 
     req.on("close", () => {
       clearInterval(interval);
+      sseClients.delete(res);
     });
   });
 
