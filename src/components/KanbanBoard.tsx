@@ -116,7 +116,7 @@ export default function KanbanBoard() {
         </Button>
       </SectionHeader>
 
-      <div className="flex-1 flex gap-5 overflow-x-auto pb-4 scrollbar-hide">
+      <div className="flex-1 flex gap-5 pb-4">
         <DndContext 
           sensors={sensors}
           collisionDetection={closestCorners}
@@ -149,15 +149,15 @@ export default function KanbanBoard() {
 
 function KanbanColumn({ column, tickets }: any) {
   return (
-    <div className="flex flex-col flex-1 min-w-[280px] max-w-[360px] h-full bg-stone-900/20 backdrop-blur-3xl rounded-[32px] border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)] overflow-hidden">
-      <div className="p-6 flex items-center justify-between shrink-0">
-        <div className="flex items-center gap-3">
-          <h3 className="font-black text-stone-100 text-sm tracking-tight uppercase">{column.title}</h3>
-          <span className="bg-stone-800/50 text-stone-400 text-[10px] px-2.5 py-1 rounded-lg font-black border border-white/10 tracking-widest shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
+    <div className="flex flex-col flex-1 min-w-0 h-full bg-stone-900/20 backdrop-blur-3xl rounded-[32px] border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)] overflow-hidden">
+      <div className="p-5 flex items-center justify-between shrink-0 gap-2">
+        <div className="flex items-center gap-3 min-w-0">
+          <h3 className="font-black text-stone-100 text-xs tracking-tight uppercase truncate" title={column.title}>{column.title}</h3>
+          <span className="bg-stone-800/50 text-stone-400 text-[10px] px-2 py-0.5 rounded-lg font-black border border-white/10 tracking-widest shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] shrink-0">
             {tickets.length}
           </span>
         </div>
-        <button className="text-stone-500 hover:text-stone-200 transition-colors p-1.5 hover:bg-white/10 rounded-xl">
+        <button className="text-stone-500 hover:text-stone-200 transition-colors p-1.5 hover:bg-white/10 rounded-xl shrink-0">
           <MoreHorizontal size={18} />
         </button>
       </div>
@@ -217,9 +217,11 @@ function TicketCard({ ticket, isOverlay }: any) {
         isOverlay && "shadow-[0_30px_60px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.2)] border-[#c5a059]/60 rotate-3 bg-stone-800/80 backdrop-blur-3xl scale-105"
       )}
     >
-      <div className="flex justify-between items-start mb-3">
-        <StatusBadge status={ticket.priority} />
-        <span className="text-[9px] text-stone-600 font-black tracking-widest uppercase">{ticket.id}</span>
+      <div className="flex justify-between items-start mb-3 gap-2">
+        <div className="shrink-0">
+          <StatusBadge status={ticket.priority} />
+        </div>
+        <span className="text-[9px] text-stone-600 font-black tracking-widest uppercase truncate max-w-[100px] text-right" title={ticket.id}>{ticket.id}</span>
       </div>
       <h4 className="font-black text-stone-100 text-sm mb-1.5 leading-snug group-hover:text-[#c5a059] transition-colors tracking-tight">{ticket.title}</h4>
       <p className="text-[11px] text-stone-500 line-clamp-2 mb-4 leading-relaxed font-medium">{ticket.description}</p>
