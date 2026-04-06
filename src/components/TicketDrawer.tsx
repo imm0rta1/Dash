@@ -147,7 +147,7 @@ export default function TicketDrawer() {
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
             className="relative w-full max-w-2xl h-full pointer-events-auto"
           >
-            <GlassPanel className="h-full rounded-none border-l border-white/5 flex flex-col p-0 overflow-hidden bg-stone-950/40 backdrop-blur-3xl shadow-[-20px_0_50px_rgba(0,0,0,0.5)]">
+            <GlassPanel className="h-full rounded-none border-l border-white/10 flex flex-col p-0 overflow-hidden bg-stone-950/60 backdrop-blur-3xl shadow-[-30px_0_60px_rgba(0,0,0,0.7),inset_1px_0_0_rgba(255,255,255,0.1)]">
               {/* Header */}
               <div className="p-8 border-b border-white/5 flex items-center justify-between bg-white/[0.01]">
                 <div className="flex items-center gap-5">

@@ -107,7 +107,7 @@ export default function ProfilesManager() {
         <input 
           type="text"
           placeholder="Search profiles by name or role..."
-          className="w-full pl-14 pr-6 py-5 bg-stone-900/40 backdrop-blur-2xl border border-white/5 rounded-[24px] focus:outline-none focus:border-[#c5a059]/30 transition-all text-stone-100 placeholder:text-stone-700 font-bold tracking-tight shadow-2xl"
+          className="w-full pl-14 pr-6 py-5 bg-stone-900/40 backdrop-blur-2xl border border-white/10 rounded-[24px] focus:outline-none focus:border-[#c5a059]/50 transition-all text-stone-100 placeholder:text-stone-700 font-bold tracking-tight shadow-[0_20px_40px_rgba(0,0,0,0.5),inset_0_2px_4px_rgba(0,0,0,0.4)]"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
@@ -135,7 +135,7 @@ export default function ProfilesManager() {
               title="Edit Agent Profile"
             />
           ) : (
-            <GlassPanel key={profile.id} className="group hover:border-[#c5a059]/30 transition-all duration-700 p-8 rounded-[32px]">
+            <GlassPanel key={profile.id} className="group hover:border-[#c5a059]/40 transition-all duration-700 p-8 rounded-[32px] shadow-[0_20px_40px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)] hover:-translate-y-2 hover:shadow-[0_40px_80px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.2)]">
               <div className="flex justify-between items-start mb-8">
                 <div className="flex items-center gap-6">
                   <div className="p-5 bg-[#c5a059]/10 text-[#c5a059] rounded-[24px] border border-[#c5a059]/20 shadow-[0_0_30px_rgba(197,160,89,0.1)] group-hover:scale-110 transition-transform duration-500">

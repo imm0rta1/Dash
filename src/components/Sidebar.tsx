@@ -25,7 +25,7 @@ import { Button, GlassPanel } from './ui/GlassComponents';
 
 const navItems = [
   { id: 'command-center', label: 'Command Center', icon: LayoutDashboard },
-  { id: 'kanban', label: 'Kanban Board', icon: Trello },
+  { id: 'kanban', label: 'Task Board', icon: Trello },
   { id: 'runs', label: 'Run Monitor', icon: PlayCircle },
   { id: 'approvals', label: 'Approvals', icon: CheckSquare },
   { id: 'profiles', label: 'Agent Profiles', icon: Users },
@@ -46,6 +46,13 @@ const PRESET_AVATARS = [
   'https://api.dicebear.com/7.x/avataaars/svg?seed=Leo',
 ];
 
+const PRESET_LOGOS = [
+  'https://api.dicebear.com/7.x/shapes/svg?seed=Hermes',
+  'https://api.dicebear.com/7.x/shapes/svg?seed=Apollo',
+  'https://api.dicebear.com/7.x/shapes/svg?seed=Zeus',
+  'https://api.dicebear.com/7.x/shapes/svg?seed=Athena',
+];
+
 export default function Sidebar() {
   const { 
     sidebarCollapsed, 
@@ -64,7 +71,9 @@ export default function Sidebar() {
   const [showProfileSettings, setShowProfileSettings] = useState(false);
   const [tempName, setTempName] = useState(userName);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [showLogoSettings, setShowLogoSettings] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const logoInputRef = useRef<HTMLInputElement>(null);
 
   const handleTitleSubmit = () => {
     if (tempTitle.trim()) {
@@ -109,19 +118,41 @@ export default function Sidebar() {
     }
   };
 
+  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        useUIStore.getState().setDashboardLogo(reader.result as string);
+        setShowLogoSettings(false);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <>
       <aside 
         className={cn(
-          "bg-stone-950/40 backdrop-blur-3xl border-r border-white/5 transition-all duration-700 flex flex-col h-screen sticky top-0 z-40 shadow-[20px_0_50px_rgba(0,0,0,0.3)]",
+          "bg-stone-950/40 backdrop-blur-3xl border-r border-white/10 transition-all duration-700 flex flex-col h-screen sticky top-0 z-40 shadow-[20px_0_50px_rgba(0,0,0,0.5),inset_-1px_0_0_rgba(255,255,255,0.05)]",
           sidebarCollapsed ? "w-24" : "w-80"
         )}
       >
         <div className="p-8 flex items-center justify-between">
           {!sidebarCollapsed && (
-            <div className="flex items-center gap-4 group/title cursor-pointer">
-              <div className="w-10 h-10 bg-[#c5a059] rounded-xl flex items-center justify-center shadow-[0_0_25px_rgba(197,160,89,0.3)] shrink-0 transition-transform group-hover/title:scale-110 duration-500">
-                <Zap size={22} className="text-stone-950" fill="currentColor" />
+            <div className="flex items-center gap-4 group/title cursor-pointer relative">
+              <div 
+                className="w-10 h-10 bg-[#c5a059] rounded-xl flex items-center justify-center shadow-[0_10px_20px_rgba(197,160,89,0.4),inset_0_1px_0_rgba(255,255,255,0.4)] shrink-0 transition-transform group-hover/title:scale-110 duration-500 overflow-hidden relative"
+                onClick={() => setShowLogoSettings(true)}
+              >
+                {useUIStore.getState().dashboardLogo ? (
+                  <img src={useUIStore.getState().dashboardLogo!} alt="Logo" className="w-full h-full object-cover" />
+                ) : (
+                  <Zap size={22} className="text-stone-950" fill="currentColor" />
+                )}
+                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover/title:opacity-100 transition-opacity flex items-center justify-center">
+                  <Edit3 size={14} className="text-white" />
+                </div>
               </div>
               {isEditingTitle ? (
                 <input
@@ -162,8 +193,8 @@ export default function Sidebar() {
               className={cn(
                 "w-full flex items-center p-4 rounded-[20px] transition-all duration-500 relative group overflow-hidden",
                 activeTab === item.id 
-                  ? "bg-stone-800/40 text-[#c5a059] shadow-[inset_0_0_30px_rgba(197,160,89,0.05)] border border-[#c5a059]/20" 
-                  : "text-stone-500 hover:bg-white/[0.03] hover:text-stone-300 border border-transparent hover:border-white/5"
+                  ? "bg-stone-800/60 text-[#c5a059] shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_10px_20px_rgba(0,0,0,0.2)] border border-[#c5a059]/30" 
+                  : "text-stone-500 hover:bg-white/[0.05] hover:text-stone-300 border border-transparent hover:border-white/10"
               )}
             >
               <item.icon size={22} className={cn(sidebarCollapsed ? "mx-auto" : "mr-5")} />
@@ -182,9 +213,9 @@ export default function Sidebar() {
           ))}
         </nav>
 
-        <div className="p-8 border-t border-white/5">
+        <div className="p-8 border-t border-white/10">
           {!sidebarCollapsed && (
-            <div className="bg-stone-900/40 rounded-[24px] p-5 border border-white/5 backdrop-blur-xl shadow-2xl relative group/profile">
+            <div className="bg-stone-900/50 rounded-[24px] p-5 border border-white/10 backdrop-blur-2xl shadow-[0_20px_40px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)] relative group/profile">
               <button 
                 onClick={() => {
                   setTempName(userName);
@@ -219,6 +250,96 @@ export default function Sidebar() {
           )}
         </div>
       </aside>
+
+      <AnimatePresence>
+        {showLogoSettings && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowLogoSettings(false)}
+              className="absolute inset-0 bg-stone-950/80 backdrop-blur-md"
+            />
+            
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-md"
+            >
+              <GlassPanel className="p-8 border-2 border-[#c5a059]/30 shadow-[0_0_80px_rgba(197,160,89,0.2)] rounded-[40px]">
+                <div className="flex justify-between items-center mb-8">
+                  <h3 className="text-2xl font-black text-stone-100 tracking-tighter uppercase italic">Dashboard Logo</h3>
+                  <button 
+                    onClick={() => setShowLogoSettings(false)}
+                    className="p-2 text-stone-500 hover:text-stone-100 hover:bg-white/5 rounded-xl transition-all"
+                  >
+                    <X size={24} />
+                  </button>
+                </div>
+
+                <div className="space-y-8">
+                  <div>
+                    <div className="flex justify-between items-end mb-4">
+                      <label className="text-[10px] font-black text-stone-600 uppercase tracking-[0.2em] block">Choose Logo</label>
+                      <div className="flex items-center gap-4">
+                        <button 
+                          onClick={() => logoInputRef.current?.click()}
+                          className="flex items-center gap-2 text-[10px] font-black text-[#c5a059] uppercase tracking-widest hover:text-white transition-colors"
+                        >
+                          <Upload size={12} />
+                          Upload Custom
+                        </button>
+                        <input 
+                          type="file"
+                          ref={logoInputRef}
+                          onChange={handleLogoChange}
+                          accept="image/*"
+                          className="hidden"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-4 gap-4">
+                      {PRESET_LOGOS.map((logo, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => {
+                            useUIStore.getState().setDashboardLogo(logo);
+                            setShowLogoSettings(false);
+                          }}
+                          className={cn(
+                            "aspect-square rounded-2xl overflow-hidden border-2 transition-all p-2",
+                            useUIStore.getState().dashboardLogo === logo 
+                              ? "border-[#c5a059] bg-[#c5a059]/10 shadow-[0_0_20px_rgba(197,160,89,0.3)]" 
+                              : "border-white/5 bg-stone-950 hover:border-white/20"
+                          )}
+                        >
+                          <img src={logo} alt={`logo-${idx}`} className="w-full h-full object-contain" />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="pt-4 border-t border-white/5">
+                    <Button 
+                      variant="secondary"
+                      onClick={() => {
+                        useUIStore.getState().setDashboardLogo(null);
+                        setShowLogoSettings(false);
+                      }}
+                      className="w-full"
+                    >
+                      Reset to Default Icon
+                    </Button>
+                  </div>
+                </div>
+              </GlassPanel>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {showProfileSettings && (

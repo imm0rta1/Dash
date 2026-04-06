@@ -21,10 +21,10 @@ export const Button = ({
   ...props 
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: 'primary' | 'secondary' | 'ghost' | 'danger', size?: 'sm' | 'md' | 'lg' }) => {
   const variants = {
-    primary: "bg-[#c5a059]/80 hover:bg-[#c5a059] text-stone-950 shadow-[0_0_20px_rgba(197,160,89,0.2)] border border-[#c5a059]/20",
-    secondary: "bg-stone-800/40 hover:bg-stone-700/60 text-stone-200 border border-white/5 backdrop-blur-md",
+    primary: "bg-[#c5a059]/80 hover:bg-[#c5a059] text-stone-950 shadow-[0_10px_20px_rgba(197,160,89,0.2),inset_0_1px_0_rgba(255,255,255,0.4)] border border-[#c5a059]/20 backdrop-blur-md",
+    secondary: "bg-stone-800/40 hover:bg-stone-700/60 text-stone-200 border border-white/10 backdrop-blur-md shadow-[0_4px_12px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]",
     ghost: "hover:bg-white/5 text-stone-500 hover:text-stone-200",
-    danger: "bg-red-900/20 hover:bg-red-800/40 text-red-400 border border-red-500/10"
+    danger: "bg-red-900/20 hover:bg-red-800/40 text-red-400 border border-red-500/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]"
   };
   
   const sizes = {
@@ -74,8 +74,8 @@ export const StatusBadge = ({ status, className }: { status: string, className?:
 };
 
 export const MetricCard = ({ label, value, icon: Icon, trend }: any) => (
-  <GlassCard className="flex items-center gap-5 border-white/5 p-6">
-    <div className="p-4 rounded-2xl bg-stone-800/50 text-[#c5a059] border border-white/5">
+  <GlassCard className="flex items-center gap-5 border-white/10 p-6 shadow-[0_15px_35px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)]">
+    <div className="p-4 rounded-2xl bg-stone-800/50 text-[#c5a059] border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
       <Icon size={24} />
     </div>
     <div>
@@ -107,7 +107,7 @@ export const SectionHeader = ({ title, subtitle, children }: any) => (
 export const Input = ({ className, ...props }: React.InputHTMLAttributes<HTMLInputElement>) => (
   <input 
     className={cn(
-      "w-full bg-stone-900/40 border border-white/5 rounded-[14px] px-4 py-3 text-sm text-stone-200 outline-none focus:border-[#c5a059]/30 focus:bg-stone-800/50 transition-all placeholder:text-stone-600",
+      "w-full bg-stone-900/40 border border-white/10 rounded-[14px] px-4 py-3 text-sm text-stone-200 outline-none focus:border-[#c5a059]/50 focus:bg-stone-800/60 transition-all placeholder:text-stone-600 shadow-[inset_0_2px_4px_rgba(0,0,0,0.4)]",
       className
     )}
     {...props}
@@ -118,9 +118,9 @@ export const TableShell = ({ headers, children, className }: any) => (
   <div className={cn("w-full overflow-hidden glass-panel p-0 rounded-[24px]", className)}>
     <table className="w-full text-left border-collapse">
       <thead>
-        <tr className="border-b border-white/5 bg-white/[0.02]">
+        <tr className="border-b border-white/10 bg-white/[0.03] backdrop-blur-md">
           {headers.map((h: string, i: number) => (
-            <th key={i} className="px-6 py-4 text-[10px] font-black text-stone-500 uppercase tracking-[0.15em]">{h}</th>
+            <th key={i} className="px-6 py-4 text-[10px] font-black text-stone-400 uppercase tracking-[0.15em]">{h}</th>
           ))}
         </tr>
       </thead>

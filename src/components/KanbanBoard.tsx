@@ -149,15 +149,15 @@ export default function KanbanBoard() {
 
 function KanbanColumn({ column, tickets }: any) {
   return (
-    <div className="flex flex-col flex-1 min-w-[280px] max-w-[360px] h-full bg-stone-900/20 backdrop-blur-md rounded-[32px] border border-white/5 shadow-2xl overflow-hidden">
+    <div className="flex flex-col flex-1 min-w-[280px] max-w-[360px] h-full bg-stone-900/20 backdrop-blur-3xl rounded-[32px] border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)] overflow-hidden">
       <div className="p-6 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-3">
           <h3 className="font-black text-stone-100 text-sm tracking-tight uppercase">{column.title}</h3>
-          <span className="bg-stone-800/50 text-stone-500 text-[10px] px-2.5 py-1 rounded-lg font-black border border-white/5 tracking-widest">
+          <span className="bg-stone-800/50 text-stone-400 text-[10px] px-2.5 py-1 rounded-lg font-black border border-white/10 tracking-widest shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
             {tickets.length}
           </span>
         </div>
-        <button className="text-stone-600 hover:text-stone-200 transition-colors p-1.5 hover:bg-white/5 rounded-xl">
+        <button className="text-stone-500 hover:text-stone-200 transition-colors p-1.5 hover:bg-white/10 rounded-xl">
           <MoreHorizontal size={18} />
         </button>
       </div>
@@ -213,8 +213,8 @@ function TicketCard({ ticket, isOverlay }: any) {
     <GlassCard 
       onClick={handleClick}
       className={cn(
-        "border-white/5 group cursor-pointer hover:border-[#c5a059]/30 transition-all duration-500 rounded-[20px] p-4",
-        isOverlay && "shadow-[0_20px_50px_rgba(0,0,0,0.5)] border-[#c5a059]/50 rotate-2 bg-stone-800/60 backdrop-blur-2xl scale-105"
+        "border-white/10 group cursor-pointer hover:border-[#c5a059]/40 transition-all duration-500 rounded-[20px] p-4 shadow-[0_10px_30px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.1)]",
+        isOverlay && "shadow-[0_30px_60px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.2)] border-[#c5a059]/60 rotate-3 bg-stone-800/80 backdrop-blur-3xl scale-105"
       )}
     >
       <div className="flex justify-between items-start mb-3">

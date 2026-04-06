@@ -187,8 +187,8 @@ export default function CommandCenter() {
 function ProfileItem({ name, status, model }: any) {
   return (
     <GlassCard className={cn(
-      "flex items-center justify-between border-white/5 p-5 rounded-[20px]",
-      status === 'Active' ? "border-[#c5a059]/20 bg-[#c5a059]/05" : ""
+      "flex items-center justify-between border-white/10 p-5 rounded-[20px] shadow-[0_10px_20px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]",
+      status === 'Active' ? "border-[#c5a059]/30 bg-[#c5a059]/10 shadow-[0_15px_30px_rgba(197,160,89,0.1),inset_0_1px_0_rgba(255,255,255,0.2)]" : ""
     )}>
       <div className="flex items-center gap-5">
         <div className={cn(
